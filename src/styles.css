@@ -1,4 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+    font-family: Roboto, sans-serif;
+    background-image: url("src/assets/images/fondo.jpg") ;
+    background-size:contain;
 
+    background-position: center center;
+  }
+
+  .prueba{
+      background-color: aquamarine;
+  }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
