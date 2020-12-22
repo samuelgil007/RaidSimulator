@@ -3,7 +3,7 @@ body {
     margin: 0;
     font-family: Roboto, sans-serif;
     background-image: url("src/assets/images/fondo.jpg") ;
-    background-size:contain;
+    background-size:auto;
 
     background-position: center center;
   }

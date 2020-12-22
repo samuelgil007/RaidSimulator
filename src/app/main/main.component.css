@@ -1,3 +1,48 @@
 mat-grid-tile {
     background: lightblue;
   }
+  .tipo1 {
+      background-color: crimson;
+      border-color: crimson;
+  }
+  .tipo2 {
+    background-color:#17a2b8 ;
+    border-color: #17a2b8;
+}
+.tipo3 {
+    background-color:darkorange ;
+    border-color: darkorange;
+}
+.tipo4 {
+    background-color:blueviolet ;
+    border-color: blueviolet;
+}
+.small-btn1 {
+    width: 400px;
+    height: 35px;
+    right: 0;
+    margin-left :10px;
+    margin-top: 10px; 
+}
+.small-btn2 {
+    width: 400px;
+    height: 35px;
+    left: 0;
+    margin-left :5px;
+    margin-top: 10px;  
+}
+.verde{
+    color: darkgreen;
+}
+.rojo{
+    color:red;
+}
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 100%;
+  }

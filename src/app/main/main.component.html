@@ -1,21 +1,125 @@
-<div class="row">
-    <div class="col-md-4 mx-auto">
-        <div class="card">
-            <div class="card-header">
-                Registro de Mascotas
-            </div>
-            <mat-grid-list cols="10" rowHeight="3:1">
-                <mat-grid-tile>1</mat-grid-tile>
-                <mat-grid-tile>2</mat-grid-tile>
-                <mat-grid-tile>3</mat-grid-tile>
-                <mat-grid-tile>4</mat-grid-tile>
-                <mat-grid-tile>1</mat-grid-tile>
-                <mat-grid-tile>2</mat-grid-tile>
-                <mat-grid-tile>3</mat-grid-tile>
-                <mat-grid-tile>4</mat-grid-tile>
-                <mat-grid-tile>1</mat-grid-tile>
-                <mat-grid-tile>2</mat-grid-tile>
-            </mat-grid-list>
+<div class="container">
+    <div class="card">
+        <div class="card-header text-center">
+            <h1 class="h5 mb-0">RAID SIMULATOR</h1>
+        </div>
+
+        <ul class="list-group list-group-flush">
+
+            
+            <li class="list-group-item text-center">
+                <div class="font-weight-bold">
+                    <button class="small-btn2 btn btn-primary" mat-button [matMenuTriggerFor]="menu1">Marca del disco
+                        duro</button>
+                    <mat-menu #menu1="matMenu">
+                        <button mat-menu-item (click)="asignarColor('tipo1')">Tipo 1</button>
+                        <button mat-menu-item (click)="asignarColor('tipo2')">Tipo 2</button>
+                        <button mat-menu-item (click)="asignarColor('tipo3')">Tipo 3</button>
+                        <button mat-menu-item (click)="asignarColor('tipo4')">Tipo 4</button>
+                    </mat-menu>
+                    
+                    <button class="small-btn1 btn btn-primary" mat-button [matMenuTriggerFor]="menu2">Tipo de
+                        raid</button>
+                    <mat-menu #menu2="matMenu">
+                        <button mat-menu-item (click)="asignarRaid('raid0')">Raid 0</button>
+                        <button mat-menu-item (click)="asignarRaid('raid1')">Raid 1</button>
+                        <button mat-menu-item (click)="asignarRaid('raid4')">Raid 4</button>
+                        <button mat-menu-item (click)="asignarRaid('raid5')">Raid 5</button>
+                        <button mat-menu-item (click)="asignarRaid('raid10')">Raid 10</button>
+                        <button mat-menu-item (click)="asignarRaid('raid01')">Raid 01</button>
+                    </mat-menu>
+                </div>
+                
+            </li>
+            <li class="list-group-item text-center">
+                <div class="font-weight-bold text-center">Añadir discos duros</div>
+                <ng-container *ngFor="let capacidad of capacidades">
+                    <button [ngClass]="{
+                        'tipo1': tipo == 'tipo1' ,
+                        'tipo2': tipo == 'tipo2' ,
+                        'tipo3': tipo == 'tipo3' ,
+                        'tipo4': tipo == 'tipo4' 
+                      }" (click)="addDisk(capacidad)" class="add-drive btn btn-hdd btn-info m-1" id="capacidad"
+                        role="button"><span class="small">{{capacidad}}
+                            TB</span> <i class="fa-hdd fas"></i></button>
+                </ng-container>
+            </li>
+
+            <li class="list-group-item text-center">
+                <div class="font-weight-bold">Servidor</div>
+                <ng-container *ngFor="let disk of arrayDisk ; let i = index">
+                    <button [ngClass]="{
+                        'tipo1': disk.tipo == 'tipo1' ,
+                        'tipo2': disk.tipo == 'tipo2' ,
+                        'tipo3': disk.tipo == 'tipo3' ,
+                        'tipo4': disk.tipo == 'tipo4' 
+                      }" (click)="removeDisk(i)" class="add-drive btn btn-hdd btn-info" id="disk.capacidad"
+                        role="button"><span class="small">{{disk.capacidad}}
+                            TB</span> <i class="fa-hdd fas"></i></button>
+                </ng-container>
+                <p></p>
+                <div [ngClass]="{'rojo': error == true, 'verde': error == false}" ><b>{{restriccion}}</b></div>
+                <div class="small text-muted " id="remove_msg">
+                    Para remover un disco, dale click.
+                </div>
+            </li>
+
+            <li class="list-group-item text-center">
+                <div class="row">
+                    <div *ngIf="contieneNuevoTipo == true" class="col-sm">
+                        <label class=""><b>Ingrese caracteristicas de la nueva marca de disco</b></label>
+                        <form class="example-form">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Rotational delay</mat-label>
+                              <input matInput placeholder="Ej. 20" value=""> 
+                            </mat-form-field>
+                          
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Seek time</mat-label>
+                                <input matInput placeholder="Ej. 30" value=""> 
+                              </mat-form-field>
+
+                              <mat-form-field class="example-full-width">
+                                <mat-label>Disk transfer rate</mat-label>
+                                <input matInput placeholder="Ej. 30" value=""> 
+                              </mat-form-field>
+                          </form>
+                    </div>
+                    <div class="col-sm">
+                        <label class=""><b>Ingrese tasa de transferencia promedio</b></label>
+                        <form class="example-form">
+                            <mat-form-field class="example-full-width">
+                              <mat-label>Secuencial (EN MB)</mat-label>
+                              <input matInput placeholder="Ej. 20" value=""> 
+                            </mat-form-field>
+                          
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Aleatorio (EN MB)</mat-label>
+                                <input matInput placeholder="Ej. 30" value=""> 
+                              </mat-form-field>
+                          </form>
+                    </div>
+                    <div class="col-sm">
+                        <div id="showCalc">
+                            <div class="alert alert-success">
+                                Available disk space:<br class="d-sm-none">
+                                <span id="storage" class="font-weight-bold"></span>
+                            </div>
+                            <div class="alert alert-info">
+                                Parity/Protection:<br class="d-sm-none">
+                                <span id="parity" class="font-weight-bold"></span>
+                            </div>
+                            <div class="alert alert-warning">
+                                Unused disk space:<br class="d-sm-none">
+                                <span id="unused" class="font-weight-bold"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="card-footer text-center">
+            <a href="https://github.com/samuelgil007/RaidSimulator"><i class="fab fa-github"></i> RAID SIMULATOR Github</a>
         </div>
     </div>
 </div>
