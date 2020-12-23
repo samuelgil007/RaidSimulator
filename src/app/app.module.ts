@@ -8,6 +8,7 @@ import { MainComponent } from './main/main.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatInputModule} from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {MatInputModule} from '@angular/material/input';
     BrowserAnimationsModule,
     MatGridListModule,
     MatMenuModule,
-    MatInputModule
+    MatInputModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

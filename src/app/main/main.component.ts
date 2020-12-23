@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { discos } from '../main/discos'
 
 @Component({
   selector: 'app-main',
@@ -15,18 +16,47 @@ export class MainComponent implements OnInit {
   capacidades = ["16", "14", "12", "10", "8", "6", "4", "3", "2", "1"]
   error = true
   contieneNuevoTipo = false
+  personalizado = {
+    "RotationalDelay": "",
+    "SeekTime": "",
+    "DiskTransfer": ""
+  }
+  aleatorio = "";
+  secuencial = "";
+  errorCampos = false;
+  errorPerso = false;
   ngOnInit(): void {
   }
 
   asignarColor(valor) {
     this.tipo = valor;
+    if (valor == "tipo4") { this.contieneNuevoTipo = true; } else { this.contieneNuevoTipo = false; }
   }
   asignarRaid(valor) {
     this.raid = valor;
     this.verificarRestriccion();
   }
   addDisk(capacidad) {
-    let array = { tipo: this.tipo, capacidad: capacidad }
+    let array;
+    if (this.tipo != "tipo4") {
+      array = discos[this.tipo][capacidad]
+      this.errorPerso = false
+    } else {
+      if (this.personalizado.RotationalDelay == "" || this.personalizado.RotationalDelay == null || this.personalizado.SeekTime == "" || this.personalizado.SeekTime == null
+        || this.personalizado.DiskTransfer == "" || this.personalizado.DiskTransfer == null || parseInt(this.personalizado.DiskTransfer) < 1 || parseInt(this.personalizado.RotationalDelay) < 1 || parseInt(this.personalizado.SeekTime) < 1) {
+        this.errorPerso = true
+        return
+      }
+      this.errorPerso = false
+      array = {
+        "nombre": "PERSONALIZADO",
+        "capacidad": parseInt(capacidad),
+        "Rotational delay": parseInt(this.personalizado.RotationalDelay),
+        "Seek Time": parseInt(this.personalizado.SeekTime),
+        "Disk transfer rate": parseInt(this.personalizado.DiskTransfer)
+      }
+    }
+    array.tipo = this.tipo;
     this.arrayDisk.push(array);
     this.verificarRestriccion();
   }
@@ -36,13 +66,6 @@ export class MainComponent implements OnInit {
   }
 
   verificarRestriccion() {
-    if(this.arrayDisk.filter((disco) => { return disco.tipo == 'tipo4'}).length > 0) 
-    {
-      this.contieneNuevoTipo = true; 
-    } else{
-      this.contieneNuevoTipo = false; 
-    }
-
     switch (this.raid) {
       case 'raid0':
         if (this.arrayDisk.length < 2) {
@@ -101,5 +124,25 @@ export class MainComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  calcularMetricas() {
+    if (this.aleatorio == "" || this.aleatorio == null || this.secuencial == "" || this.secuencial == null
+        ||  parseInt(this.aleatorio) < 1 || parseInt(this.secuencial) < 1 || this.error == true) {
+        this.errorCampos = true
+        return
+      } else {
+        this.errorCampos = false
+        //ENVIAR METODOS
+        let metricas = {
+          "raid" : this.raid.replace("raid",""),
+          "secuencial": parseInt(this.secuencial),
+          "aleatorio": parseInt(this.aleatorio)
+        }
+        //ENVIAR
+        console.log(this.arrayDisk)
+        console.log(metricas)
+      
+      }
   }
 }

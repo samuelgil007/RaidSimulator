@@ -6,18 +6,18 @@
 
         <ul class="list-group list-group-flush">
 
-            
+
             <li class="list-group-item text-center">
                 <div class="font-weight-bold">
                     <button class="small-btn2 btn btn-primary" mat-button [matMenuTriggerFor]="menu1">Marca del disco
                         duro</button>
                     <mat-menu #menu1="matMenu">
-                        <button mat-menu-item (click)="asignarColor('tipo1')">Tipo 1</button>
-                        <button mat-menu-item (click)="asignarColor('tipo2')">Tipo 2</button>
-                        <button mat-menu-item (click)="asignarColor('tipo3')">Tipo 3</button>
-                        <button mat-menu-item (click)="asignarColor('tipo4')">Tipo 4</button>
+                        <button mat-menu-item (click)="asignarColor('tipo1')">SEAGATE</button>
+                        <button mat-menu-item (click)="asignarColor('tipo2')">TOSHIBA</button>
+                        <button mat-menu-item (click)="asignarColor('tipo3')">WESTERN DIGITAL</button>
+                        <button mat-menu-item (click)="asignarColor('tipo4')">PERSONALIZADO</button>
                     </mat-menu>
-                    
+
                     <button class="small-btn1 btn btn-primary" mat-button [matMenuTriggerFor]="menu2">Tipo de
                         raid</button>
                     <mat-menu #menu2="matMenu">
@@ -29,7 +29,7 @@
                         <button mat-menu-item (click)="asignarRaid('raid01')">Raid 01</button>
                     </mat-menu>
                 </div>
-                
+
             </li>
             <li class="list-group-item text-center">
                 <div class="font-weight-bold text-center">Añadir discos duros</div>
@@ -43,6 +43,7 @@
                         role="button"><span class="small">{{capacidad}}
                             TB</span> <i class="fa-hdd fas"></i></button>
                 </ng-container>
+                <div *ngIf="errorPerso" class="rojo"><b>Añada las caracteristicas correctas antes de añadir un nuevo disco</b></div>
             </li>
 
             <li class="list-group-item text-center">
@@ -58,7 +59,7 @@
                             TB</span> <i class="fa-hdd fas"></i></button>
                 </ng-container>
                 <p></p>
-                <div [ngClass]="{'rojo': error == true, 'verde': error == false}" ><b>{{restriccion}}</b></div>
+                <div [ngClass]="{'rojo': error == true, 'verde': error == false}"><b>{{restriccion}}</b></div>
                 <div class="small text-muted " id="remove_msg">
                     Para remover un disco, dale click.
                 </div>
@@ -70,34 +71,43 @@
                         <label class=""><b>Ingrese caracteristicas de la nueva marca de disco</b></label>
                         <form class="example-form">
                             <mat-form-field class="example-full-width">
-                              <mat-label>Rotational delay</mat-label>
-                              <input matInput placeholder="Ej. 20" value=""> 
+                                <mat-label>Rotational delay (ms)</mat-label>
+                                <input type="number" min="1" pattern="^\d*\.?\d+$"
+                                    [(ngModel)]="personalizado.RotationalDelay" matInput placeholder="Ej. 5" value=""
+                                    name="RotationalDelay">
                             </mat-form-field>
-                          
-                            <mat-form-field class="example-full-width">
-                                <mat-label>Seek time</mat-label>
-                                <input matInput placeholder="Ej. 30" value=""> 
-                              </mat-form-field>
 
-                              <mat-form-field class="example-full-width">
-                                <mat-label>Disk transfer rate</mat-label>
-                                <input matInput placeholder="Ej. 30" value=""> 
-                              </mat-form-field>
-                          </form>
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Seek time (ms)</mat-label>
+                                <input type="number" min="1" pattern="^\d*\.?\d+$" [(ngModel)]="personalizado.SeekTime"
+                                    matInput placeholder="Ej. 8.33" value="" name="SeekTime">
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Disk transfer rate (mb/s)</mat-label>
+                                <input type="number" min="1" pattern="^\d*\.?\d+$"
+                                    [(ngModel)]="personalizado.DiskTransfer" matInput placeholder="Ej. 600" value=""
+                                    name="DiskTransfer">
+                            </mat-form-field>
+                        </form>
                     </div>
                     <div class="col-sm">
-                        <label class=""><b>Ingrese tasa de transferencia promedio</b></label>
+                        <label class=""><b>Ingrese tasa de transferencia promedio (workload)</b></label>
                         <form class="example-form">
                             <mat-form-field class="example-full-width">
-                              <mat-label>Secuencial (EN MB)</mat-label>
-                              <input matInput placeholder="Ej. 20" value=""> 
+                                <mat-label>Secuencial (MB)</mat-label>
+                                <input type="number" min="1" pattern="^\d*\.?\d+$" [(ngModel)]="aleatorio" matInput
+                                    placeholder="Ej. 20" value="" name="Secuencial">
                             </mat-form-field>
-                          
+
                             <mat-form-field class="example-full-width">
-                                <mat-label>Aleatorio (EN MB)</mat-label>
-                                <input matInput placeholder="Ej. 30" value=""> 
-                              </mat-form-field>
-                          </form>
+                                <mat-label>Aleatorio (MB)</mat-label>
+                                <input type="number" min="1" pattern="^\d*\.?\d+$" [(ngModel)]="secuencial" matInput
+                                    placeholder="Ej. 30" value="" name="Aleatorio">
+                            </mat-form-field>
+                            <button (click)="calcularMetricas()" class="small-btn1 btn btn-primary">Calcular Metricas de Evaluación</button>
+                            <div *ngIf="errorCampos" class="rojo"><b>Llene todos los campos, ninguno negativo o cero.</b></div>
+                        </form>
                     </div>
                     <div class="col-sm">
                         <div id="showCalc">
@@ -119,7 +129,8 @@
             </li>
         </ul>
         <div class="card-footer text-center">
-            <a href="https://github.com/samuelgil007/RaidSimulator"><i class="fab fa-github"></i> RAID SIMULATOR Github</a>
+            <a href="https://github.com/samuelgil007/RaidSimulator"><i class="fab fa-github"></i> RAID SIMULATOR
+                Github</a>
         </div>
     </div>
 </div>
