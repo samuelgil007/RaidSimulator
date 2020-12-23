@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { discos } from '../main/discos'
+import { discos } from '../main/discos';
+import { RaidSimulatorService } from '../services/raid-simulator.service';
 
 @Component({
   selector: 'app-main',
@@ -8,7 +9,7 @@ import { discos } from '../main/discos'
 })
 export class MainComponent implements OnInit {
 
-  constructor() { }
+  constructor(private rs: RaidSimulatorService) { }
   arrayDisk = []
   tipo = "tipo1"
   raid = "raid0"
@@ -51,9 +52,9 @@ export class MainComponent implements OnInit {
       array = {
         "nombre": "PERSONALIZADO",
         "capacidad": parseInt(capacidad),
-        "Rotational delay": parseInt(this.personalizado.RotationalDelay),
-        "Seek Time": parseInt(this.personalizado.SeekTime),
-        "Disk transfer rate": parseInt(this.personalizado.DiskTransfer)
+        "rotationalDelay": parseInt(this.personalizado.RotationalDelay),
+        "seekTime": parseInt(this.personalizado.SeekTime),
+        "diskTransfer": parseInt(this.personalizado.DiskTransfer)
       }
     }
     array.tipo = this.tipo;
@@ -140,8 +141,10 @@ export class MainComponent implements OnInit {
           "aleatorio": parseInt(this.aleatorio)
         }
         //ENVIAR
-        console.log(this.arrayDisk)
-        console.log(metricas)
+        //console.log(this.arrayDisk)
+        //console.log(metricas)
+        let objeto = this.rs.RaidCalculate(this.arrayDisk,metricas);
+        console.log(objeto);
       
       }
   }
