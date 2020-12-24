@@ -26,12 +26,31 @@ export class MainComponent implements OnInit {
   secuencial = "";
   errorCampos = false;
   errorPerso = false;
+  almacenamiento;
+  noUsado;
+  nroFallosPermitidos;
+  paridad;
+  randomRead;
+  randomWrite;
+  secuencialRead;
+  secuencialWrite;
+  showinfo = false;
+  info = {}
   ngOnInit(): void {
   }
-
+  showInformation(capacidad) {
+    if (this.tipo != "tipo4") {
+      if (this.showinfo) {
+        this.showinfo = false;
+      } else {
+        this.showinfo = true;
+        this.info = discos[this.tipo][capacidad]
+      }
+    }
+  }
   asignarColor(valor) {
     this.tipo = valor;
-    if (valor == "tipo4") { this.contieneNuevoTipo = true; } else { this.contieneNuevoTipo = false; }
+    if (valor == "tipo4") { this.contieneNuevoTipo = true; } else { this.contieneNuevoTipo = false; this.errorPerso = false }
   }
   asignarRaid(valor) {
     this.raid = valor;
@@ -129,23 +148,31 @@ export class MainComponent implements OnInit {
 
   calcularMetricas() {
     if (this.aleatorio == "" || this.aleatorio == null || this.secuencial == "" || this.secuencial == null
-        ||  parseInt(this.aleatorio) < 1 || parseInt(this.secuencial) < 1 || this.error == true) {
-        this.errorCampos = true
-        return
-      } else {
-        this.errorCampos = false
-        //ENVIAR METODOS
-        let metricas = {
-          "raid" : this.raid.replace("raid",""),
-          "secuencial": parseInt(this.secuencial),
-          "aleatorio": parseInt(this.aleatorio)
-        }
-        //ENVIAR
-        //console.log(this.arrayDisk)
-        //console.log(metricas)
-        let objeto = this.rs.RaidCalculate(this.arrayDisk,metricas);
-        console.log(objeto);
-      
+      || parseInt(this.aleatorio) < 1 || parseInt(this.secuencial) < 1 || this.error == true) {
+      this.errorCampos = true
+      return
+    } else {
+      this.errorCampos = false
+      //ENVIAR METODOS
+      let metricas = {
+        "raid": this.raid.replace("raid", ""),
+        "secuencial": parseInt(this.secuencial),
+        "aleatorio": parseInt(this.aleatorio)
       }
+      //ENVIAR
+      /* console.log(this.arrayDisk)
+      console.log(metricas) */
+      let objeto = this.rs.RaidCalculate(this.arrayDisk, metricas);
+      /* console.log(objeto); */
+      this.almacenamiento = objeto.almacenamiento
+      this.noUsado = objeto.noUsado
+      this.nroFallosPermitidos = objeto.nroFallosPermitidos
+      this.paridad = objeto.paridad
+      this.randomRead = objeto.randomRead
+      this.randomWrite = objeto.randomWrite
+      this.secuencialRead = objeto.secuencialRead
+      this.secuencialWrite = objeto.secuencialWrite
+
+    }
   }
 }

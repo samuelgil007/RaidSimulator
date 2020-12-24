@@ -40,10 +40,13 @@
                         'tipo3': tipo == 'tipo3' ,
                         'tipo4': tipo == 'tipo4' 
                       }" (click)="addDisk(capacidad)" class="add-drive btn btn-hdd btn-info m-1" id="capacidad"
-                        role="button"><span class="small">{{capacidad}}
-                            TB</span> <i class="fa-hdd fas"></i></button>
+                        role="button" (mouseover)="showInformation(capacidad)" (mouseout)="showInformation(capacidad)"><span class="small">{{capacidad}}
+                            TB</span> <i class="fa-hdd fas"></i></button>    
                 </ng-container>
-                <div *ngIf="errorPerso" class="rojo"><b>Añada las caracteristicas correctas antes de añadir un nuevo disco</b></div>
+                <p *ngIf="showinfo == true"><b>Nombre:</b> {{info.nombre}}  <b>Seek Time:</b> {{info.seekTime}}ms  <b>Rotational delay</b> {{info.rotationalDelay}}ms
+                    <b>Disk transfer rate</b> {{info.diskTransfer}}mb/s</p>
+                <div *ngIf="errorPerso" class="rojo"><b>Añada las caracteristicas correctas antes de añadir un nuevo
+                        disco</b></div>
             </li>
 
             <li class="list-group-item text-center">
@@ -96,32 +99,45 @@
                         <form class="example-form">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Secuencial (MB)</mat-label>
-                                <input type="number" min="1" pattern="^\d*\.?\d+$" [(ngModel)]="aleatorio" matInput
+                                <input type="number" min="1" pattern="^\d*\.?\d+$" [(ngModel)]="secuencial" matInput
                                     placeholder="Ej. 20" value="" name="Secuencial">
                             </mat-form-field>
 
                             <mat-form-field class="example-full-width">
                                 <mat-label>Aleatorio (KB)</mat-label>
-                                <input type="number" min="1" pattern="^\d*\.?\d+$" [(ngModel)]="secuencial" matInput
+                                <input type="number" min="1" pattern="^\d*\.?\d+$" [(ngModel)]="aleatorio" matInput
                                     placeholder="Ej. 30" value="" name="Aleatorio">
                             </mat-form-field>
-                            <button (click)="calcularMetricas()" class="small-btn1 btn btn-primary">Calcular Metricas de Evaluación</button>
-                            <div *ngIf="errorCampos" class="rojo"><b>Llene todos los campos, ninguno negativo o cero.</b></div>
+                            <button (click)="calcularMetricas()" class="small-btn1 btn btn-primary">Calcular Metricas de
+                                Evaluación</button>
+                            <div *ngIf="errorCampos" class="rojo"><b>Llene todos los campos, ninguno negativo o
+                                    cero.</b></div>
                         </form>
                     </div>
                     <div class="col-sm">
                         <div id="showCalc">
                             <div class="alert alert-success">
-                                Available disk space:<br class="d-sm-none">
-                                <span id="storage" class="font-weight-bold"></span>
+                                Capacidad:<br class="d-sm-none">
+                                <span id="storage" class="font-weight-bold">
+                                    <p>Almacenamiento: {{almacenamiento}}</p>
+                                    <p>Espacio no usado: {{noUsado}}</p>
+                                    <p>Paridad: {{paridad}}</p>
+                                </span>
                             </div>
                             <div class="alert alert-info">
-                                Parity/Protection:<br class="d-sm-none">
-                                <span id="parity" class="font-weight-bold"></span>
+                                Confiabilidad:<br class="d-sm-none">
+                                <span id="parity" class="font-weight-bold">
+                                    <p>Numero de fallos permitidos: {{nroFallosPermitidos}}</p>
+                                </span>
                             </div>
                             <div class="alert alert-warning">
-                                Unused disk space:<br class="d-sm-none">
-                                <span id="unused" class="font-weight-bold"></span>
+                                Desempeño:<br class="d-sm-none">
+                                <span id="unused" class="font-weight-bold">
+                                    <p>Lectura aleatoria: {{randomRead}} MB/s</p>
+                                    <p>Escritura aleatoria: {{randomWrite}} MB/s</p>
+                                    <p>Lectura secuencial: {{secuencialRead}} MB/s</p>
+                                    <p>Escritura secuencial: {{secuencialWrite}} MB/s</p>
+                                </span>
                             </div>
                         </div>
                     </div>

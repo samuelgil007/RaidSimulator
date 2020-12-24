@@ -121,9 +121,9 @@ export class RaidSimulatorService {
     switch (raid) {
       case '0':
         S =  this.recorrerDiscosS(nroDiscos, server, info);
-        console.log("S" , S);
+        /* console.log("S" , S); */
         R =  this.recorrerDiscosA(nroDiscos, server, info);
-        console.log("R" , R);
+        /* console.log("R" , R); */
         secuencialRead = nroDiscos * S;
         secuencialWrite = nroDiscos * S;
         randomRead = nroDiscos * R;
