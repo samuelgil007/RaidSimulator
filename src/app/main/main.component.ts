@@ -148,7 +148,7 @@ export class MainComponent implements OnInit {
 
   calcularMetricas() {
     if (this.aleatorio == "" || this.aleatorio == null || this.secuencial == "" || this.secuencial == null
-      || parseInt(this.aleatorio) < 1 || parseInt(this.secuencial) < 1 || this.error == true) {
+      || parseInt(this.aleatorio) <=0 || parseInt(this.secuencial) <= 0 || this.error == true) {
       this.errorCampos = true
       return
     } else {
