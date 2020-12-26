@@ -63,17 +63,17 @@ export class MainComponent implements OnInit {
       this.errorPerso = false
     } else {
       if (this.personalizado.RotationalDelay == "" || this.personalizado.RotationalDelay == null || this.personalizado.SeekTime == "" || this.personalizado.SeekTime == null
-        || this.personalizado.DiskTransfer == "" || this.personalizado.DiskTransfer == null || parseInt(this.personalizado.DiskTransfer) < 1 || parseInt(this.personalizado.RotationalDelay) < 1 || parseInt(this.personalizado.SeekTime) < 1) {
+        || this.personalizado.DiskTransfer == "" || this.personalizado.DiskTransfer == null || parseFloat(this.personalizado.DiskTransfer) <= 0 || parseFloat(this.personalizado.RotationalDelay) <= 0 || parseFloat(this.personalizado.SeekTime) <= 0) {
         this.errorPerso = true
         return
       }
       this.errorPerso = false
       array = {
         "nombre": "PERSONALIZADO",
-        "capacidad": parseInt(capacidad),
-        "rotationalDelay": parseInt(this.personalizado.RotationalDelay),
-        "seekTime": parseInt(this.personalizado.SeekTime),
-        "diskTransfer": parseInt(this.personalizado.DiskTransfer)
+        "capacidad": parseFloat(capacidad),
+        "rotationalDelay": parseFloat(this.personalizado.RotationalDelay),
+        "seekTime": parseFloat(this.personalizado.SeekTime),
+        "diskTransfer": parseFloat(this.personalizado.DiskTransfer)
       }
     }
     array.tipo = this.tipo;
@@ -148,7 +148,7 @@ export class MainComponent implements OnInit {
 
   calcularMetricas() {
     if (this.aleatorio == "" || this.aleatorio == null || this.secuencial == "" || this.secuencial == null
-      || parseInt(this.aleatorio) <=0 || parseInt(this.secuencial) <= 0 || this.error == true) {
+      || parseFloat(this.aleatorio) <=0 || parseFloat(this.secuencial) <= 0 || this.error == true) {
       this.errorCampos = true
       return
     } else {
@@ -156,8 +156,8 @@ export class MainComponent implements OnInit {
       //ENVIAR METODOS
       let metricas = {
         "raid": this.raid.replace("raid", ""),
-        "secuencial": parseInt(this.secuencial),
-        "aleatorio": parseInt(this.aleatorio)
+        "secuencial": parseFloat(this.secuencial),
+        "aleatorio": parseFloat(this.aleatorio)
       }
       //ENVIAR
       /* console.log(this.arrayDisk)
