@@ -52,7 +52,7 @@ export class RaidSimulatorService {
         paridad = paridadX + " TB";
         noUsado = totalTeras - (paridadX + tamanoMinimo) + " TB";
         resultado =  this.calcularThroughput("1", nroDiscos, 0, 0, server, info);
-        nroFallosPermitidos = "Permite 1 fallo de un disco, 2 con suerte.";
+        nroFallosPermitidos = `Permite 1 fallo de un disco, ${Math.floor(nroDiscos/2)} con suerte.`;
         resultado.almacenamiento = almacenamiento;
         resultado.paridad = paridad;
         resultado.noUsado = noUsado;
