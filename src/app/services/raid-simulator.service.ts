@@ -229,7 +229,7 @@ export class RaidSimulatorService {
     let discoParidad: Boolean = false;
     //compruebo si todos los tamanos son iguales, en ese caso, se manda como el de paridad al primero, en otro caso se busca al de paridad para que este sea el S o R.
     if(minimo===maximo){
-      return  this.calcularS(server[0].seekTime, server[0].rotationalDelay, server[0].diskTransfer, info.aleatorio); //del disco de paridad (el mas pequeño que encuentra primero)
+      return  this.calcularR(server[0].seekTime, server[0].rotationalDelay, server[0].diskTransfer, info.aleatorio); //del disco de paridad (el mas pequeño que encuentra primero)
     }
     for (let k = 0; k < nroDiscos; k++) {
       if (discoParidad === false) {
